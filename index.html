@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SEO AI — Elevate Your SEO Efforts</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #07071a;
+        --purple: #7c3aed;
+        --purple-light: #a855f7;
+        --purple-glow: #9333ea;
+        --pink: #ec4899;
+        --text: #f1f5f9;
+        --muted: #64748b;
+        --card-bg: rgba(255, 255, 255, 0.03);
+        --card-border: rgba(255, 255, 255, 0.08);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'DM Sans', sans-serif;
+        overflow-x: hidden;
+        cursor: none;
+      }
+
+      /* Custom Cursor */
+      #cursor {
+        position: fixed;
+        width: 12px;
+        height: 12px;
+        background: var(--purple-light);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+        mix-blend-mode: screen;
+      }
+      #cursor-ring {
+        position: fixed;
+        width: 36px;
+        height: 36px;
+        border: 1.5px solid rgba(168, 85, 247, 0.5);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
+      }
+
+      /* Canvas Layer */
+      #canvas3d {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 55%;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      /* Grid lines bg */
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image: linear-gradient(
+            rgba(124, 58, 237, 0.07) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(124, 58, 237, 0.07) 1px, transparent 1px);
+        background-size: 60px 60px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Ambient glow */
+      body::after {
+        content: '';
+        position: fixed;
+        top: -20%;
+        right: -10%;
+        width: 80vw;
+        height: 80vh;
+        background: radial-gradient(
+          ellipse,
+          rgba(124, 58, 237, 0.18) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ── NAV ── */
+      nav {
+        position: relative;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 22px 48px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(12px);
+        background: rgba(7, 7, 26, 0.6);
+      }
+
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, var(--purple), var(--pink));
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 800;
+        font-family: 'Syne', sans-serif;
+        box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+      }
+      .nav-brand {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 36px;
+      }
+      .nav-links a {
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: color 0.2s;
+        letter-spacing: 0.01em;
+      }
+      .nav-links a:hover {
+        color: #fff;
+      }
+
+      .btn-waitlist {
+        padding: 10px 22px;
+        background: linear-gradient(135deg, var(--purple), var(--pink));
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        font-family: 'DM Sans', sans-serif;
+        cursor: none;
+        transition: box-shadow 0.3s, transform 0.2s;
+        box-shadow: 0 0 20px rgba(124, 58, 237, 0.35);
+      }
+      .btn-waitlist:hover {
+        box-shadow: 0 0 35px rgba(124, 58, 237, 0.65);
+        transform: translateY(-1px);
+      }
+
+      /* ── HERO ── */
+      .hero {
+        position: relative;
+        z-index: 10;
+        min-height: calc(100vh - 73px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 80px 48px;
+        max-width: 680px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid rgba(124, 58, 237, 0.4);
+        border-radius: 100px;
+        padding: 7px 16px;
+        margin-bottom: 32px;
+        width: fit-content;
+      }
+      .badge-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--purple-light);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(0.8);
+        }
+      }
+      .badge span {
+        font-size: 12px;
+        color: #c4b5fd;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+
+      h1 {
+        font-family: 'Syne', sans-serif;
+        font-size: clamp(52px, 6vw, 76px);
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        margin-bottom: 24px;
+      }
+      h1 .highlight {
+        color: #c4b5fd;
+      }
+
+      .hero-sub {
+        font-size: 17px;
+        color: #94a3b8;
+        line-height: 1.7;
+        max-width: 440px;
+        margin-bottom: 36px;
+        font-weight: 400;
+      }
+
+      .cta-row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .email-input {
+        padding: 13px 18px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: #fff;
+        font-size: 14px;
+        font-family: 'DM Sans', sans-serif;
+        outline: none;
+        min-width: 220px;
+        transition: border-color 0.2s, background 0.2s;
+      }
+      .email-input::placeholder {
+        color: #64748b;
+      }
+      .email-input:focus {
+        border-color: var(--purple-light);
+        background: rgba(124, 58, 237, 0.08);
+      }
+      .btn-white {
+        padding: 13px 26px;
+        background: #fff;
+        color: #07071a;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        font-family: 'DM Sans', sans-serif;
+        cursor: none;
+        transition: box-shadow 0.3s, transform 0.2s;
+        white-space: nowrap;
+      }
+      .btn-white:hover {
+        box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .trusted {
+        margin-top: 64px;
+        padding-top: 40px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .trusted-label {
+        font-size: 12px;
+        color: #475569;
+        font-weight: 500;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .brand-row {
+        display: flex;
+        gap: 32px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .brand-item {
+        font-size: 13px;
+        color: #475569;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        font-family: 'Syne', sans-serif;
+        transition: color 0.2s;
+      }
+      .brand-item:hover {
+        color: #94a3b8;
+      }
+
+      /* ── FEATURES SECTION ── */
+      .section-features {
+        position: relative;
+        z-index: 10;
+        background: linear-gradient(
+          180deg,
+          transparent 0%,
+          rgba(124, 58, 237, 0.06) 30%,
+          rgba(7, 7, 26, 0.98) 60%
+        );
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 100px 48px;
+      }
+
+      .section-tag {
+        display: block;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--purple-light);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+
+      h2 {
+        font-family: 'Syne', sans-serif;
+        font-size: clamp(30px, 3.5vw, 44px);
+        font-weight: 800;
+        text-align: center;
+        line-height: 1.2;
+        letter-spacing: -0.025em;
+        max-width: 700px;
+        margin: 0 auto 64px;
+      }
+
+      /* Dashboard Card */
+      .dashboard-card {
+        background: rgba(255, 255, 255, 0.025);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6),
+          0 0 0 1px rgba(124, 58, 237, 0.1);
+        max-width: 1000px;
+        margin: 0 auto 56px;
+      }
+
+      .dash-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .window-dots {
+        display: flex;
+        gap: 7px;
+      }
+      .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+      .dot-r {
+        background: #ff5f57;
+      }
+      .dot-y {
+        background: #ffbd2e;
+      }
+      .dot-g {
+        background: #28c840;
+      }
+
+      .dash-title-area {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .dash-title {
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .dash-url {
+        font-size: 11px;
+        color: #475569;
+      }
+
+      .search-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .search-input {
+        padding: 7px 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 12px;
+        outline: none;
+        font-family: 'DM Sans', sans-serif;
+        width: 160px;
+      }
+      .icon-btn {
+        width: 30px;
+        height: 30px;
+        background: rgba(124, 58, 237, 0.2);
+        border: 1px solid rgba(124, 58, 237, 0.3);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: none;
+        font-size: 14px;
+        transition: background 0.2s;
+      }
+      .icon-btn:hover {
+        background: rgba(124, 58, 237, 0.4);
+      }
+
+      .dash-body {
+        display: flex;
+      }
+
+      .sidebar {
+        width: 200px;
+        flex-shrink: 0;
+        padding: 16px 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .sidebar-item {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 9px 16px;
+        font-size: 12px;
+        color: #64748b;
+        font-weight: 500;
+        cursor: none;
+        transition: all 0.15s;
+      }
+      .sidebar-item:hover {
+        color: #c4b5fd;
+        background: rgba(124, 58, 237, 0.08);
+      }
+      .sidebar-item.active {
+        color: #c4b5fd;
+        background: rgba(124, 58, 237, 0.15);
+        border-left: 2px solid var(--purple-light);
+        font-weight: 700;
+      }
+      .sidebar-icon {
+        font-size: 13px;
+      }
+
+      .dash-main {
+        flex: 1;
+        padding: 24px;
+        overflow: hidden;
+      }
+
+      .date-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 12px;
+        color: #94a3b8;
+        margin-bottom: 20px;
+      }
+
+      .stats-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .stat-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 12px;
+        padding: 16px;
+        position: relative;
+        overflow: hidden;
+      }
+      .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 60px;
+        height: 60px;
+        background: radial-gradient(
+          circle,
+          rgba(124, 58, 237, 0.2),
+          transparent 70%
+        );
+      }
+      .stat-label {
+        font-size: 11px;
+        color: #64748b;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 8px;
+      }
+      .stat-value {
+        font-family: 'Syne', sans-serif;
+        font-size: 30px;
+        font-weight: 800;
+        color: #e2d9f3;
+      }
+      .stat-delta {
+        font-size: 12px;
+        font-weight: 700;
+        margin-top: 4px;
+      }
+      .green {
+        color: #34d399;
+      }
+      .red {
+        color: #f87171;
+      }
+
+      /* Chart */
+      .chart-container {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 16px;
+        height: 110px;
+        position: relative;
+        overflow: hidden;
+      }
+      .chart-container svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Bottom Grid */
+      .bottom-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .keywords-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 12px;
+        padding: 14px;
+      }
+      .keywords-title {
+        font-size: 11px;
+        color: #64748b;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 10px;
+      }
+      .kw-item {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 4px 0;
+        font-size: 11.5px;
+        color: #94a3b8;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      }
+      .kw-item:last-child {
+        border-bottom: none;
+      }
+      .kw-dot {
+        width: 5px;
+        height: 5px;
+        background: var(--purple-light);
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .traffic-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 12px;
+        padding: 16px;
+        position: relative;
+        overflow: hidden;
+      }
+      .traffic-mini-chart {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        opacity: 0.4;
+      }
+
+      /* Feature Cards */
+      .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .feat-card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 16px;
+        padding: 28px 24px;
+        transition: border-color 0.3s, background 0.3s, transform 0.3s;
+        cursor: none;
+      }
+      .feat-card:hover {
+        border-color: rgba(124, 58, 237, 0.4);
+        background: rgba(124, 58, 237, 0.06);
+        transform: translateY(-3px);
+      }
+      .feat-icon {
+        width: 40px;
+        height: 40px;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid rgba(124, 58, 237, 0.25);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        margin-bottom: 14px;
+      }
+      .feat-title {
+        font-family: 'Syne', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .feat-desc {
+        font-size: 13px;
+        color: #64748b;
+        line-height: 1.6;
+      }
+      .badge-new {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--purple), var(--pink));
+        color: #fff;
+        font-size: 9px;
+        font-weight: 800;
+        padding: 2px 7px;
+        border-radius: 4px;
+        margin-left: 6px;
+        vertical-align: middle;
+        letter-spacing: 0.05em;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Custom Cursors -->
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- 3D Canvas -->
+    <canvas id="canvas3d"></canvas>
+
+    <!-- ── NAV ── -->
+    <nav>
+      <div class="nav-logo">
+        <div class="logo-icon">AI</div>
+        <span class="nav-brand">SEO.ai</span>
+      </div>
+      <div class="nav-links">
+        <a href="#">Features</a>
+        <a href="#">Developers</a>
+        <a href="#">Pricing</a>
+        <a href="#">Changelog</a>
+      </div>
+      <button class="btn-waitlist">Join waitlist</button>
+    </nav>
+
+    <!-- ── HERO ── -->
+    <section class="hero">
+      <div class="badge">
+        <div class="badge-dot"></div>
+        <span>Latest integration just arrived</span>
+      </div>
+
+      <h1><span class="highlight">Elev</span>ate your<br />SEO efforts.</h1>
+
+      <p class="hero-sub">
+        Unlock the full potential of your website with our AI tool, designed to
+        streamline and simplify SEO.
+      </p>
+
+      <div class="cta-row">
+        <input class="email-input" type="email" placeholder="Your email" />
+        <button class="btn-white">Join waitlist</button>
+      </div>
+
+      <div class="trusted">
+        <p class="trusted-label">Trusted by top innovative teams</p>
+        <div class="brand-row">
+          <span class="brand-item">⟶ Acme Corp</span>
+          <span class="brand-item">Outside</span>
+          <span class="brand-item">PULSE</span>
+          <span class="brand-item">✕ APEX</span>
+          <span class="brand-item">❋ Quest</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FEATURES ── -->
+    <section class="section-features">
+      <span class="section-tag">Everything you need</span>
+      <h2>
+        Harness the power of AI, making search engine optimization intuitive and
+        effective for all skill levels.
+      </h2>
+
+      <!-- Dashboard -->
+      <div class="dashboard-card">
+        <div class="dash-header">
+          <div class="window-dots">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+          </div>
+          <div class="dash-title-area">
+            <span class="dash-title">Site Overview</span>
+            <span class="dash-url">www.website.com ↗</span>
+          </div>
+          <div class="search-bar">
+            <input class="search-input" type="text" placeholder="Search" />
+            <div class="icon-btn">⚙</div>
+          </div>
+        </div>
+
+        <div class="dash-body">
+          <!-- Sidebar -->
+          <div class="sidebar">
+            <div class="sidebar-item active">
+              <span class="sidebar-icon">◈</span> Site Overview
+            </div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">↗</span> Analytics
+            </div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">✦</span> Smart Keyword Generator
+            </div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">◎</span> Goals
+            </div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">≡</span> Content Evaluation
+            </div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">⟁</span> Backlink Audit
+            </div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">⚡</span> Link Optimization
+            </div>
+          </div>
+
+          <!-- Main -->
+          <div class="dash-main">
+            <div class="date-pill">📅 Jun 24 &nbsp;→&nbsp; Today</div>
+
+            <div class="stats-row">
+              <div class="stat-card">
+                <div class="stat-label">Visibility</div>
+                <div class="stat-value">10.15%</div>
+                <div class="stat-delta green">↑ +5.6%</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Organic Keywords</div>
+                <div class="stat-value">35.6K</div>
+                <div class="stat-delta red">↓ −2.5%</div>
+              </div>
+            </div>
+
+            <div class="chart-container">
+              <svg viewBox="0 0 600 80" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="0%"
+                      stop-color="#a855f7"
+                      stop-opacity="0.35"
+                    />
+                    <stop offset="100%" stop-color="#a855f7" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M0,60 C30,55 60,45 100,48 C140,51 160,35 200,30 C240,25 270,40 310,28 C350,16 390,35 430,22 C470,9 520,30 560,18 L600,15 L600,80 L0,80 Z"
+                  fill="url(#g1)"
+                />
+                <path
+                  d="M0,60 C30,55 60,45 100,48 C140,51 160,35 200,30 C240,25 270,40 310,28 C350,16 390,35 430,22 C470,9 520,30 560,18 L600,15"
+                  fill="none"
+                  stroke="#a855f7"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                />
+                <circle cx="310" cy="28" r="4" fill="#a855f7" />
+                <circle cx="310" cy="28" r="8" fill="rgba(168,85,247,0.25)" />
+              </svg>
+            </div>
+
+            <div class="bottom-grid">
+              <div class="keywords-card">
+                <div class="keywords-title">Top Keywords</div>
+                <div class="kw-item">
+                  <div class="kw-dot"></div>
+                  online payment processing
+                </div>
+                <div class="kw-item">
+                  <div class="kw-dot"></div>
+                  secure transactions
+                </div>
+                <div class="kw-item">
+                  <div class="kw-dot"></div>
+                  online transaction platform
+                </div>
+                <div class="kw-item">
+                  <div class="kw-dot"></div>
+                  online shopping payments
+                </div>
+                <div class="kw-item">
+                  <div class="kw-dot"></div>
+                  e-commerce payment gateway
+                </div>
+                <div class="kw-item">
+                  <div class="kw-dot"></div>
+                  b2b payment processing
+                </div>
+              </div>
+
+              <div class="traffic-card">
+                <div class="stat-label">Traffic</div>
+                <div class="stat-value">59.8K</div>
+                <div class="stat-delta green" style="margin-bottom: 10px">
+                  ↑ +10.7%
+                </div>
+                <svg
+                  class="traffic-mini-chart"
+                  viewBox="0 0 200 50"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="0%"
+                        stop-color="#a855f7"
+                        stop-opacity="0.5"
+                      />
+                      <stop
+                        offset="100%"
+                        stop-color="#a855f7"
+                        stop-opacity="0"
+                      />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M0,40 C20,35 40,42 60,30 C80,18 100,38 120,22 C140,6 160,28 180,15 L200,10 L200,50 L0,50 Z"
+                    fill="url(#g2)"
+                  />
+                  <path
+                    d="M0,40 C20,35 40,42 60,30 C80,18 100,38 120,22 C140,6 160,28 180,15 L200,10"
+                    fill="none"
+                    stroke="#a855f7"
+                    stroke-width="2"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Cards -->
+      <div class="feat-grid">
+        <div class="feat-card">
+          <div class="feat-icon">◈</div>
+          <div class="feat-title">User-friendly dashboard</div>
+          <p class="feat-desc">
+            Perform complex SEO audits and optimizations with a single click.
+          </p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">↗</div>
+          <div class="feat-title">Visual reports</div>
+          <p class="feat-desc">
+            Visual insights into your site's performance, updated in real-time.
+          </p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">✦</div>
+          <div class="feat-title">
+            Smart Keyword Generator <span class="badge-new">NEW</span>
+          </div>
+          <p class="feat-desc">
+            Automatic suggestions and the best keywords to target.
+          </p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">≡</div>
+          <div class="feat-title">Content evaluation</div>
+          <p class="feat-desc">
+            Simple corrections for immediate improvements to your content.
+          </p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">◎</div>
+          <div class="feat-title">SEO goal setting</div>
+          <p class="feat-desc">
+            Helps you set and achieve SEO goals with guided assistance.
+          </p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🔔</div>
+          <div class="feat-title">Automated alerts</div>
+          <p class="feat-desc">
+            Automatic notifications about your SEO health, including quick
+            fixes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // ── CURSOR ──
+      const cursor = document.getElementById('cursor');
+      const ring = document.getElementById('cursor-ring');
+      let mx = 0,
+        my = 0,
+        rx = 0,
+        ry = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+        cursor.style.left = mx + 'px';
+        cursor.style.top = my + 'px';
+      });
+
+      function animateCursor() {
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + 'px';
+        ring.style.top = ry + 'px';
+        requestAnimationFrame(animateCursor);
+      }
+      animateCursor();
+
+      document
+        .querySelectorAll('button,a,.feat-card,.sidebar-item')
+        .forEach((el) => {
+          el.addEventListener('mouseenter', () => {
+            cursor.style.width = '20px';
+            cursor.style.height = '20px';
+            ring.style.width = '60px';
+            ring.style.height = '60px';
+          });
+          el.addEventListener('mouseleave', () => {
+            cursor.style.width = '12px';
+            cursor.style.height = '12px';
+            ring.style.width = '36px';
+            ring.style.height = '36px';
+          });
+        });
+
+      // ── 3D CUBES ──
+      const canvas = document.getElementById('canvas3d');
+      const ctx = canvas.getContext('2d');
+
+      function resize() {
+        canvas.width = window.innerWidth * 0.55;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      let mouseX = 0,
+        mouseY = 0;
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      // Cube class
+      class Cube {
+        constructor(x, y, z, size, hue) {
+          this.ox = x;
+          this.oy = y;
+          this.oz = z;
+          this.size = size;
+          this.rx = Math.random() * Math.PI * 2;
+          this.ry = Math.random() * Math.PI * 2;
+          this.rz = Math.random() * Math.PI * 2;
+          this.vrx = 0.004 + Math.random() * 0.004;
+          this.vry = 0.005 + Math.random() * 0.005;
+          this.vrz = 0.001;
+          this.floatOffset = Math.random() * Math.PI * 2;
+          this.hue = hue;
+          this.vertices = [];
+          this.faces = [
+            [0, 1, 2, 3],
+            [4, 5, 6, 7],
+            [0, 1, 5, 4],
+            [2, 3, 7, 6],
+            [0, 3, 7, 4],
+            [1, 2, 6, 5],
+          ];
+          this.faceColors = [0.55, 0.45, 0.5, 0.4, 0.48, 0.42];
+        }
+
+        getVertices() {
+          const s = this.size;
+          return [
+            [-s, -s, -s],
+            [s, -s, -s],
+            [s, s, -s],
+            [-s, s, -s],
+            [-s, -s, s],
+            [s, -s, s],
+            [s, s, s],
+            [-s, s, s],
+          ];
+        }
+
+        rotateX(p, a) {
+          const c = Math.cos(a),
+            s = Math.sin(a);
+          return [p[0], p[1] * c - p[2] * s, p[1] * s + p[2] * c];
+        }
+        rotateY(p, a) {
+          const c = Math.cos(a),
+            s = Math.sin(a);
+          return [p[0] * c + p[2] * s, p[1], -p[0] * s + p[2] * c];
+        }
+        rotateZ(p, a) {
+          const c = Math.cos(a),
+            s = Math.sin(a);
+          return [p[0] * c - p[1] * s, p[0] * s + p[1] * c, p[2]];
+        }
+
+        project(p) {
+          const fov = 500;
+          const scale = fov / (fov - p[2]);
+          return [
+            p[0] * scale + canvas.width * 0.5,
+            p[1] * scale + canvas.height * 0.42,
+          ];
+        }
+
+        draw(time) {
+          this.rx += this.vrx;
+          this.ry += this.vry;
+
+          const floatY = Math.sin(time * 0.0008 + this.floatOffset) * 35;
+          const depth = (this.oz + 600) / 900;
+          const mX = (mouseX - window.innerWidth * 0.5) * 0.18 * depth;
+          const mY = (mouseY - window.innerHeight * 0.5) * 0.1 * depth;
+
+          const verts = this.getVertices().map((v) => {
+            let p = this.rotateX(v, this.rx);
+            p = this.rotateY(p, this.ry);
+            p = this.rotateZ(p, this.rz);
+            p[0] += this.ox + mX;
+            p[1] += this.oy + floatY + mY;
+            p[2] += this.oz;
+            return this.project(p);
+          });
+
+          const raw3d = this.getVertices().map((v) => {
+            let p = this.rotateX(v, this.rx);
+            p = this.rotateY(p, this.ry);
+            return this.rotateZ(p, this.rz);
+          });
+
+          // Sort faces by depth
+          const sortedFaces = this.faces
+            .map((face, i) => {
+              const avgZ = face.reduce((s, vi) => s + raw3d[vi][2], 0) / 4;
+              return { face, avgZ, brightness: this.faceColors[i] };
+            })
+            .sort((a, b) => a.avgZ - b.avgZ);
+
+          sortedFaces.forEach(({ face, brightness }) => {
+            ctx.beginPath();
+            ctx.moveTo(verts[face[0]][0], verts[face[0]][1]);
+            face.forEach((vi) => ctx.lineTo(verts[vi][0], verts[vi][1]));
+            ctx.closePath();
+
+            // Fill face
+            const alpha = 0.18 + brightness * 0.25;
+            ctx.fillStyle = `hsla(${this.hue}, 75%, 60%, ${alpha})`;
+            ctx.fill();
+
+            // Edge glow
+            ctx.strokeStyle = `hsla(${this.hue}, 90%, 70%, 0.75)`;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+          });
+
+          // Reflection glow at top face
+          const topFace = (face) => {
+            const pts = [0, 1, 2, 3].map((i) => verts[i]);
+            const cx = pts.reduce((s, p) => s + p[0], 0) / 4;
+            const cy = pts.reduce((s, p) => s + p[1], 0) / 4;
+            const grad = ctx.createRadialGradient(
+              cx,
+              cy,
+              0,
+              cx,
+              cy,
+              this.size * 0.8
+            );
+            grad.addColorStop(0, `hsla(${this.hue},80%,80%,0.25)`);
+            grad.addColorStop(1, `hsla(${this.hue},80%,60%,0)`);
+            ctx.beginPath();
+            ctx.moveTo(pts[0][0], pts[0][1]);
+            pts.forEach((p) => ctx.lineTo(p[0], p[1]));
+            ctx.closePath();
+            ctx.fillStyle = grad;
+            ctx.fill();
+          };
+          topFace();
+        }
+      }
+
+      const cubes = [
+        new Cube(-200, 90, -280, 52, 265),
+        new Cube(-60, 190, -380, 58, 275),
+        new Cube(80, -70, -320, 48, 255),
+        new Cube(210, 70, -360, 60, 270),
+        new Cube(-170, -110, -480, 44, 280),
+        new Cube(180, -160, -260, 50, 260),
+        new Cube(10, 160, -550, 42, 268),
+        new Cube(160, 110, -180, 55, 272),
+      ];
+
+      function animate(time) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Sort cubes back-to-front
+        const sorted = [...cubes].sort((a, b) => a.oz - b.oz);
+        sorted.forEach((cube) => cube.draw(time));
+
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+    </script>
+  </body>
+</html>
